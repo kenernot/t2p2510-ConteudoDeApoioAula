@@ -17,7 +17,7 @@ public class Conexao {
     private static Connection createConnection() {
         Properties config = new Properties();
         config.put("user", "root");
-        config.put("password", "root");
+        config.put("password", "");
         Connection conn = null;
         try {
             Class.forName("com.mysql.jdbc.Driver");
