@@ -34,7 +34,7 @@ public class Locacao {
         this.idLocacao = idLocacao;
     }
 
-    public Cliente getClinte() {
+    public Cliente getCliente() {
         return clinte;
     }
 

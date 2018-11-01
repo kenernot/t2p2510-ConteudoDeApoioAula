@@ -5,55 +5,58 @@
  */
 package br.com.lucasj.DAO;
 
-import br.com.lucasj.model.Marca;
+import br.com.lucasj.model.Automovel;
+import br.com.lucasj.model.Cliente;
+import br.com.lucasj.model.Modelo;
 import br.com.lucasj.services.Conexao;
 import com.mysql.jdbc.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import sun.security.rsa.RSACore;
 
 /**
  *
  * @author lukas
  */
-public class DaoMarca {
+public class DaoCliente {
 
     private Connection conn;
 
-    public DaoMarca() {
+    public DaoCliente() {
         this.conn = (Connection) Conexao.getInstance().getConn();
     }
 
-    public void salvar(Marca marca) {
-        Marca mar = marca;
-        String sql = "update marca set titulo = ? where idmarca = ? ;";
-        if (mar.getIdMarca() == -1) {
-            sql = "insert into marca(titulo, idmarca) values(?,?);";
+    public void salvar(Cliente cli) {
+        Cliente cliente = cli;
+        String sql = "update cliente set nome = ? where idcliente=?;";
+        if (cliente.getIdCliente() == -1) {
+            sql = "insert into cliente(nome, idcliente) values(?,?);";
         }
 
         try {
             PreparedStatement ps = this.conn.prepareStatement(sql);
-            ps.setString(1, mar.getTitulo());
-            ps.setInt(2, mar.getIdMarca());
+            ps.setString(1, cliente.getNome());
+            ps.setInt(2, cliente.getIdCliente());
             ps.executeUpdate();
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
     }
 
-    public ArrayList<Marca> getAll() {
-        ArrayList<Marca> minhaLista = new ArrayList<>();
-        String sql = "select * from marca;";
+    public ArrayList<Cliente> getAll() {
+        ArrayList<Cliente> minhaLista = new ArrayList<>();
+        String sql = "select * from cliente;";
         try {
             PreparedStatement ps = this.conn.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
-                Marca marca = new Marca();
-                marca.setIdMarca(rs.getInt("idmarca"));
-                marca.setTitulo(rs.getString("titulo"));
-                minhaLista.add(marca);
+                Cliente cliente = new Cliente();
+                cliente.setIdCliente(rs.getInt("idcliente"));
+                cliente.setNome(rs.getString("nome"));
+                minhaLista.add(cliente);
             } else {
                 return null;
             }
@@ -65,18 +68,19 @@ public class DaoMarca {
         return null;
     }
 
-    public Marca getByID(int id) {
-        String sql = "select * from marca where idmarca = ?;";
+    public Cliente getByID(int id) {
+        String sql = "select * from cliente where idcliente = ?;";
         try {
             PreparedStatement ps = this.conn.prepareStatement(sql);
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
-                Marca marca = new Marca();
-                marca.setIdMarca(rs.getInt("idmarca"));
-                marca.setTitulo(rs.getString("titulo"));
-                return marca;
+                Cliente cliente = new Cliente();
+                cliente.setIdCliente(rs.getInt("idcliente"));
+                cliente.setNome(rs.getString("nome"));
+
+                return cliente;
             } else {
                 return null;
             }
@@ -87,12 +91,12 @@ public class DaoMarca {
         return null;
     }
 
-    public void remover(Marca marca) {
-        String sql = "delete from marca where idmarca = ?;";
+    public void remover(Cliente cliente) {
+        String sql = "delete from cliente where idcliente = ?;";
         try {
             PreparedStatement ps = this.conn.prepareStatement(sql);
-            
-            ps.setInt(1, marca.getIdMarca());
+
+            ps.setInt(1, cliente.getIdCliente());
             ps.executeUpdate();
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());

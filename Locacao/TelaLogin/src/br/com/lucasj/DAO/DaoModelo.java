@@ -54,7 +54,7 @@ public class DaoModelo {
             if (rs.next()) {
                 Modelo modelo = new Modelo();
                 modelo.setIdModelo(rs.getInt("idmodelo"));
-                modelo.setTitulo("titulo");
+                modelo.setTitulo(rs.getString("titulo"));
                 DaoMarca dm = new DaoMarca();
                 modelo.setMarca(dm.getByID(rs.getInt("idmarca")));
                 minhaLista.add(modelo);
@@ -79,7 +79,7 @@ public class DaoModelo {
             if (rs.next()) {
                 Modelo modelo = new Modelo();
                 modelo.setIdModelo(rs.getInt("idmodelo"));
-                modelo.setTitulo("titulo");
+                modelo.setTitulo(rs.getString("titulo"));
                 DaoMarca dm = new DaoMarca();
                 modelo.setMarca(dm.getByID(rs.getInt("idmarca")));
                 return modelo;
