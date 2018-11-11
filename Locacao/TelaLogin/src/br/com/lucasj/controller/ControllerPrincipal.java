@@ -28,9 +28,12 @@ public class ControllerPrincipal implements ActionListener {
     
     @Override
     public void actionPerformed(ActionEvent e) {
+        System.out.println(e.getActionCommand());
         if (e.getActionCommand().equals("pessoa")) {
             minhaView.getmDesktop().add( new Telinha());
-           
+        } else if (e.getActionCommand().equals("marca")) {
+            ControllerMarca controllerMarca = new ControllerMarca();
+            //minhaView.getmDesktop().add(controllerMarca.getTelaMarca());
         }
     }
     

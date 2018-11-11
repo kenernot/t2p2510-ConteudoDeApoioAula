@@ -5,6 +5,7 @@
  */
 package br.com.lucasj.DAO;
 
+import br.com.lucasj.interfaces.DAOInterface;
 import br.com.lucasj.model.Marca;
 import br.com.lucasj.services.Conexao;
 import com.mysql.jdbc.Connection;
@@ -17,7 +18,7 @@ import java.util.ArrayList;
  *
  * @author lukas
  */
-public class DaoMarca {
+public class DaoMarca implements DAOInterface {
 
     private Connection conn;
 
@@ -25,25 +26,28 @@ public class DaoMarca {
         this.conn = (Connection) Conexao.getInstance().getConn();
     }
 
-    public void salvar(Marca marca) {
-        Marca mar = marca;
-        String sql = "update marca set titulo = ? where idmarca = ? ;";
-        if (mar.getIdMarca() == -1) {
-            sql = "insert into marca(titulo, idmarca) values(?,?);";
+    public void salvar(Object model) {
+        if (model instanceof Marca) {
+            Marca mar = (Marca) model;
+            String sql = "update marca set titulo = ? where idmarca = ? ;";
+            if (mar.getIdMarca() == -1) {
+                sql = "insert into marca(titulo, idmarca) values(?,?);";
+            }
+
+            try {
+                PreparedStatement ps = this.conn.prepareStatement(sql);
+                ps.setString(1, mar.getTitulo());
+                ps.setInt(2, mar.getIdMarca());
+                ps.executeUpdate();
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+            }
         }
 
-        try {
-            PreparedStatement ps = this.conn.prepareStatement(sql);
-            ps.setString(1, mar.getTitulo());
-            ps.setInt(2, mar.getIdMarca());
-            ps.executeUpdate();
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-        }
     }
 
-    public ArrayList<Marca> getAll() {
-        ArrayList<Marca> minhaLista = new ArrayList<>();
+    public ArrayList<Object> getAll() {
+        ArrayList<Object> minhaLista = new ArrayList<>();
         String sql = "select * from marca;";
         try {
             PreparedStatement ps = this.conn.prepareStatement(sql);
@@ -65,11 +69,52 @@ public class DaoMarca {
         return null;
     }
 
-    public Marca getByID(int id) {
-        String sql = "select * from marca where idmarca = ?;";
+    public Object getByID(Object model) {
+        if (model instanceof Marca && model != null ) {
+            String sql = "select * from marca where idmarca = ?;";
+            try {
+                PreparedStatement ps = this.conn.prepareStatement(sql);
+                Marca marca = new Marca();
+                ps.setInt(1, marca.getIdMarca());
+                ResultSet rs = ps.executeQuery();
+
+                if (rs.next()) {
+
+                    marca.setIdMarca(rs.getInt("idmarca"));
+                    marca.setTitulo(rs.getString("titulo"));
+                    return marca;
+                } else {
+                    return null;
+                }
+
+            } catch (SQLException ex) {
+                System.out.println("#01");
+            }
+        }
+        return null;
+    }
+
+    public void remover(Object model) {
+
+        if (model instanceof Marca) {
+            Marca marca = (Marca) model;
+            String sql = "delete from marca where idmarca = ?;";
+            try {
+                PreparedStatement ps = this.conn.prepareStatement(sql);
+
+                ps.setInt(1, marca.getIdMarca());
+                ps.executeUpdate();
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+            }
+        }
+    }
+
+    @Override
+    public Object getLast() {
+        String sql = "select * from marca where idmarca = (select max(idmarca) from marca);";
         try {
             PreparedStatement ps = this.conn.prepareStatement(sql);
-            ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
@@ -85,17 +130,5 @@ public class DaoMarca {
             System.out.println("#01");
         }
         return null;
-    }
-
-    public void remover(Marca marca) {
-        String sql = "delete from marca where idmarca = ?;";
-        try {
-            PreparedStatement ps = this.conn.prepareStatement(sql);
-            
-            ps.setInt(1, marca.getIdMarca());
-            ps.executeUpdate();
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-        }
     }
 }

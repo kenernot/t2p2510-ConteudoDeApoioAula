@@ -26,7 +26,7 @@ public class TelaPrincipal extends JFrame {
     private JPanel mPainel;
     private JDesktopPane mDesktop;
     private JMenu menuCadastros;
-    private JMenuItem cadastroPessoa, cadastroEmpresa;
+    private JMenuItem cadastroPessoa, cadastroEmpresa, CadastroMarca;
     private ActionListener al;
 
     public TelaPrincipal(ActionListener al) throws HeadlessException {
@@ -47,6 +47,9 @@ public class TelaPrincipal extends JFrame {
         mDesktop = new JDesktopPane();
         menuCadastros = new JMenu("Cadastros");
         cadastroPessoa = new JMenuItem("Pessoa");
+        CadastroMarca = new JMenuItem("marca");
+        CadastroMarca.addActionListener(al);
+        CadastroMarca.setActionCommand("marca");
         cadastroPessoa.setActionCommand("pessoa");
         cadastroPessoa.addActionListener(al);
         cadastroEmpresa = new JMenuItem("Empresa");
@@ -56,6 +59,7 @@ public class TelaPrincipal extends JFrame {
         menuBar.add(menuCadastros);
         menuCadastros.add(cadastroPessoa);
         menuCadastros.add(cadastroEmpresa);
+        menuCadastros.add(CadastroMarca);
         this.getContentPane().add(mDesktop, BorderLayout.CENTER);
         this.getContentPane().add(mPainel, BorderLayout.SOUTH);
 

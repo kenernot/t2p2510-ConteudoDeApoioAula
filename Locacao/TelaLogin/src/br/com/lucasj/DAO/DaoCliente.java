@@ -5,6 +5,7 @@
  */
 package br.com.lucasj.DAO;
 
+import br.com.lucasj.interfaces.DAOInterface;
 import br.com.lucasj.model.Automovel;
 import br.com.lucasj.model.Cliente;
 import br.com.lucasj.model.Modelo;
@@ -20,7 +21,7 @@ import sun.security.rsa.RSACore;
  *
  * @author lukas
  */
-public class DaoCliente {
+public class DaoCliente implements DAOInterface {
 
     private Connection conn;
 
@@ -28,25 +29,27 @@ public class DaoCliente {
         this.conn = (Connection) Conexao.getInstance().getConn();
     }
 
-    public void salvar(Cliente cli) {
-        Cliente cliente = cli;
-        String sql = "update cliente set nome = ? where idcliente=?;";
-        if (cliente.getIdCliente() == -1) {
-            sql = "insert into cliente(nome, idcliente) values(?,?);";
-        }
+    public void salvar(Object model) {
+        if (model instanceof Cliente) {
+            Cliente cliente = (Cliente) model;
+            String sql = "update cliente set nome = ? where idcliente=?;";
+            if (cliente.getIdCliente() == -1) {
+                sql = "insert into cliente(nome, idcliente) values(?,?);";
+            }
 
-        try {
-            PreparedStatement ps = this.conn.prepareStatement(sql);
-            ps.setString(1, cliente.getNome());
-            ps.setInt(2, cliente.getIdCliente());
-            ps.executeUpdate();
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
+            try {
+                PreparedStatement ps = this.conn.prepareStatement(sql);
+                ps.setString(1, cliente.getNome());
+                ps.setInt(2, cliente.getIdCliente());
+                ps.executeUpdate();
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+            }
         }
     }
 
-    public ArrayList<Cliente> getAll() {
-        ArrayList<Cliente> minhaLista = new ArrayList<>();
+    public ArrayList<Object> getAll() {
+        ArrayList<Object> minhaLista = new ArrayList<>();
         String sql = "select * from cliente;";
         try {
             PreparedStatement ps = this.conn.prepareStatement(sql);
@@ -68,11 +71,52 @@ public class DaoCliente {
         return null;
     }
 
-    public Cliente getByID(int id) {
-        String sql = "select * from cliente where idcliente = ?;";
+    public Object getByID(Object model) {
+        if (model instanceof Cliente && model != null) {
+            String sql = "select * from cliente where idcliente = ?;";
+            try {
+                PreparedStatement ps = this.conn.prepareStatement(sql);
+                Cliente cliente = new Cliente();
+                ps.setInt(1, cliente.getIdCliente());
+                ResultSet rs = ps.executeQuery();
+
+                if (rs.next()) {
+
+                    cliente.setIdCliente(rs.getInt("idcliente"));
+                    cliente.setNome(rs.getString("nome"));
+
+                    return cliente;
+                } else {
+                    return null;
+                }
+
+            } catch (SQLException ex) {
+                System.out.println("#01");
+            }
+        }
+        return null;
+    }
+
+    public void remover(Object model) {
+        if (model instanceof Cliente) {
+            Cliente cliente = (Cliente) model;
+            String sql = "delete from cliente where idcliente = ?;";
+            try {
+                PreparedStatement ps = this.conn.prepareStatement(sql);
+
+                ps.setInt(1, cliente.getIdCliente());
+                ps.executeUpdate();
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+            }
+        }
+    }
+
+    @Override
+    public Object getLast() {
+        String sql = "select * from cliente where idcliente = (select max(idcliente) from cliente);";
         try {
             PreparedStatement ps = this.conn.prepareStatement(sql);
-            ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
@@ -89,17 +133,5 @@ public class DaoCliente {
             System.out.println("#01");
         }
         return null;
-    }
-
-    public void remover(Cliente cliente) {
-        String sql = "delete from cliente where idcliente = ?;";
-        try {
-            PreparedStatement ps = this.conn.prepareStatement(sql);
-
-            ps.setInt(1, cliente.getIdCliente());
-            ps.executeUpdate();
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-        }
     }
 }
