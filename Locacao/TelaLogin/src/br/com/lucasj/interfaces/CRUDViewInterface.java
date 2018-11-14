@@ -5,7 +5,9 @@
  */
 package br.com.lucasj.interfaces;
 
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import javax.swing.JPanel;
 
 /**
  *
@@ -25,15 +27,20 @@ public interface CRUDViewInterface {
      * @param CRUDCommand
      */
     public boolean doCRUD(String CRUDCommand);
-    
+
     /**
      * Retorna um modelo de objeto dos campos preenchidos
-     * @return 
+     *
+     * @return
      */
     public Object getModel();
-    
+
     public Object getSelectedModel();
-    
+
     public void doMsg(String msg);
-    
+
+    public void setActionListener(ActionListener al);
+
+    public void setPanelComponentState(Boolean state);
+
 }

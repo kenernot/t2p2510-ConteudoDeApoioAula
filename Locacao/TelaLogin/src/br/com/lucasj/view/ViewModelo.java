@@ -6,9 +6,9 @@
 package br.com.lucasj.view;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -26,74 +26,67 @@ import javax.swing.table.DefaultTableModel;
  * @author lukas
  */
 public class ViewModelo extends JFrame implements ActionListener {
-
+    
     protected JPanel panelTOP, panelMID, panelBOT, panelINTERNO, panelPesquisa;
     protected JButton btInserir, btEditar, btSalvar, btRemover, btCancelar, btExit, btPesquisar, btAbrir;
     protected JTextField edPesquisa;
-    protected ActionListener al;
     protected JTabbedPane tabbedPanel;
     protected JTable tabela;
     protected DefaultTableModel tm;
-
-    public ViewModelo(String titulo, ActionListener al) {
+    
+    public ViewModelo(String titulo) {
         super(titulo);
-        this.al = al;
         init();
     }
-
+    
     private void init() {
         this.setLayout(new BorderLayout());
-        this.panelTOP = new JPanel();
+        this.panelTOP = new JPanel(new FlowLayout());
         this.panelMID = new JPanel(new GridLayout(0, 2));
         this.panelBOT = new JPanel();
         this.panelINTERNO = new JPanel();
         this.panelPesquisa = new JPanel(new BorderLayout());
         this.add(panelTOP, BorderLayout.NORTH);
-
+        panelTOP.setSize(new Dimension(500, 300));
         this.add(panelBOT, BorderLayout.SOUTH);
-        this.panelTOP.setLayout(new FlowLayout());
-
+        
         btInserir = new JButton("Inserir");
-        btInserir.addActionListener(al);
-
+        
         btEditar = new JButton("Editar");
-        btEditar.addActionListener(al);
-
+        
         btCancelar = new JButton("Cancelar");
-        btCancelar.addActionListener(al);
-
+        
         btSalvar = new JButton("Salvar");
-        btSalvar.addActionListener(al);
-
+        
         btRemover = new JButton("Excluir");
-        btRemover.addActionListener(al);
-
+        
         btExit = new JButton("Sair");
         btExit.addActionListener(this);
-
+        
+        JPanel tab1 = new JPanel(new BorderLayout());
+        tab1.add(panelMID);
         tabbedPanel = new JTabbedPane();
-        tabbedPanel.addTab("Formulário", panelMID);
+        tabbedPanel.addTab("Formulário", tab1);
         tabbedPanel.addTab("Pesquisa", panelPesquisa);
-
+        
         JPanel panelPesquisaTop = new JPanel(new FlowLayout());
         JPanel panelPesquisaMID = new JPanel(new BorderLayout());
-
+        
         panelPesquisa.add(panelPesquisaTop, BorderLayout.NORTH);
         btPesquisar = new JButton("Pesquisar");
-        btPesquisar.addActionListener(al);
+        
         btAbrir = new JButton("Abrir");
-        btAbrir.addActionListener(al);
         
         edPesquisa = new JTextField();
         panelPesquisaTop.add(edPesquisa);
         panelPesquisaTop.add(btPesquisar);
         panelPesquisaTop.add(btAbrir);
-
+        
         tm = new DefaultTableModel(1, 0);
         tabela = new JTable(tm);
         panelPesquisa.add(panelPesquisaMID, BorderLayout.CENTER);
         panelPesquisaMID.add(tabela, BorderLayout.CENTER);
-
+        
         this.add(tabbedPanel, BorderLayout.CENTER);
         panelTOP.add(btInserir);
         panelTOP.add(btEditar);
@@ -101,14 +94,15 @@ public class ViewModelo extends JFrame implements ActionListener {
         panelTOP.add(btSalvar);
         panelTOP.add(btRemover);
         panelTOP.add(panelINTERNO);
-        panelTOP.setLayout(new BorderLayout());
         panelINTERNO.add(btExit, BorderLayout.EAST);
         panelMID.setEnabled(false);
-
+        this.setCRUDButtons("salvar");
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.tabela.setColumnSelectionAllowed(false);
         
         edPesquisa.setSize(new Dimension(200, 100));
+        
+        setPanelCompEnable(false);
     }
 
     /**
@@ -134,12 +128,38 @@ public class ViewModelo extends JFrame implements ActionListener {
             panelMID.setEnabled(false);
         }
     }
-
+    
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().toLowerCase().equals("sair")) {
             this.dispose();
         }
     }
-
+    
+    public void setActionListenerPAI(ActionListener al) {
+        btInserir.addActionListener(al);
+        btEditar.addActionListener(al);
+        btCancelar.addActionListener(al);
+        btSalvar.addActionListener(al);
+        btRemover.addActionListener(al);
+        btAbrir.addActionListener(al);
+        btPesquisar.addActionListener(al);
+    }
+    
+    private void setPanelEnabled(JPanel panel, Boolean isEnabled) {
+        panel.setEnabled(isEnabled);
+        
+        Component[] components = panel.getComponents();
+        
+        for (Component component : components) {
+            if (component instanceof JPanel) {
+                setPanelEnabled((JPanel) component, isEnabled);
+            }
+            component.setEnabled(isEnabled);
+        }
+    }
+    
+    protected void setPanelCompEnable(Boolean state) {
+        setPanelEnabled(this.panelMID, state);
+    }
 }

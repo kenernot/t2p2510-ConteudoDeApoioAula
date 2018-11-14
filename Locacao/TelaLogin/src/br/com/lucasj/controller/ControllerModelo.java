@@ -21,47 +21,78 @@ public class ControllerModelo implements ActionListener {
     CRUDViewInterface myCrudView;
     DAOInterface myDAO;
 
-    public ControllerModelo() {
-
+    public ControllerModelo(ControllerInterface myController, CRUDViewInterface myCrudView, DAOInterface myDAO) {
+        this.myController = myController;
+        this.myCrudView = myCrudView;
+        this.myDAO = myDAO;
+        this.myCrudView.setActionListener(this);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getActionCommand().toLowerCase().equals("inserir")) {
-            this.myCrudView.doCRUD("inserir");
-            this.myCrudView.limparCampos();
-        } else if (e.getActionCommand().toLowerCase().equals("editar")) {
-            this.myCrudView.doCRUD("editar");
-        } else if (e.getActionCommand().toLowerCase().equals("salvar")) {
-            String msg = this.myController.verificarCamposObrigatorios();
-            if (msg == null) {
-                this.myCrudView.doCRUD("salvar");
-                Object myObject = this.myCrudView.getModel();
-                myDAO.salvar(myObject);
-                this.myCrudView.preencherCampos(myDAO.getLast());;
-            } else {
-                myCrudView.doMsg(msg);
-            }
+        System.out.println("An further attack: ~>" + e.getActionCommand() + "<~");
 
+        if (e.getActionCommand().toLowerCase().equals("inserir")) {
+            inserir();
+        } else if (e.getActionCommand().toLowerCase().equals("editar")) {
+            editar();
+        } else if (e.getActionCommand().toLowerCase().equals("salvar")) {
+            salvar();
         } else if (e.getActionCommand().toLowerCase().equals("excluir")) {
-            if (this.myCrudView.doCRUD("excluir")) {
-                myDAO.remover(myCrudView.getModel());
-                this.myCrudView.limparCampos();
-            }
+            excluir();
         } else if (e.getActionCommand().toLowerCase().equals("cancelar")) {
-            this.myCrudView.doCRUD("cancelar");
-            myCrudView.limparCampos();
+            cancelar();
         } else if (e.getActionCommand().toLowerCase().equals("pesquisar")) {
-            this.myCrudView.preencherTabelaPesquisar(myDAO.getAll());
+            pesquisar();
         } else if (e.getActionCommand().toLowerCase().equals("abrir")) {
-            this.myCrudView.limparCampos();
-            this.myCrudView.preencherCampos(myDAO.getByID(myCrudView.getSelectedModel()));
+            abrir();
         }
     }
 
-    protected void falseConstruct(ControllerInterface myController, CRUDViewInterface myCrudView, DAOInterface myDAO) {
-        this.myController = myController;
-        this.myCrudView = myCrudView;
-        this.myDAO = myDAO;
+    private void inserir() {
+        this.myCrudView.doCRUD("inserir");
+        this.myCrudView.limparCampos();
+        this.myCrudView.setPanelComponentState(true);
     }
+
+    private void salvar() {
+        String msg = this.myController.verificarCamposObrigatorios();
+        if (msg == null) {
+            this.myCrudView.doCRUD("salvar");
+            Object myObject = this.myCrudView.getModel();
+            myDAO.salvar(myObject);
+            this.myCrudView.preencherCampos(myDAO.getLast());;
+        } else {
+            this.myCrudView.doMsg(msg);
+        }
+    }
+
+    private void editar() {
+        this.myCrudView.doCRUD("editar");
+        this.myCrudView.setPanelComponentState(true);
+    }
+
+    private void cancelar() {
+        this.myCrudView.doCRUD("cancelar");
+        this.myCrudView.limparCampos();
+        this.myCrudView.setPanelComponentState(false);
+    }
+
+    private void excluir() {
+        if (this.myCrudView.doCRUD("excluir")) {
+            this.myDAO.remover(myCrudView.getModel());
+            this.myCrudView.limparCampos();
+            this.myCrudView.setPanelComponentState(false);
+        }
+    }
+
+    private void pesquisar() {
+        this.myCrudView.preencherTabelaPesquisar(myDAO.getAll());
+    }
+
+    private void abrir() {
+        this.myCrudView.limparCampos();
+        this.myCrudView.preencherCampos(myDAO.getByID(myCrudView.getSelectedModel()));
+    }
+
 }
