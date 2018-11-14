@@ -83,6 +83,8 @@ public class ControllerModelo implements ActionListener {
             this.myDAO.remover(myCrudView.getModel());
             this.myCrudView.limparCampos();
             this.myCrudView.setPanelComponentState(false);
+        } else {
+            this.myCrudView.doMsg("Falha na exclusão!");
         }
     }
 
