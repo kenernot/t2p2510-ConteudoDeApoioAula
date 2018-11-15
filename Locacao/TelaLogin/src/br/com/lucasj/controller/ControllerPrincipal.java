@@ -13,10 +13,10 @@ import java.util.Date;
 import javax.swing.JLabel;
 
 public class ControllerPrincipal implements ActionListener {
-    
+
     private TelaPrincipal minhaView;
     private Usuario user;
-    
+
     public ControllerPrincipal(Usuario user) {
         this.user = user;
         minhaView = new TelaPrincipal(this);
@@ -25,16 +25,17 @@ public class ControllerPrincipal implements ActionListener {
         this.minhaView.getmPainel().add(new JLabel("Usuário: " + this.user.getLogin()));
         this.minhaView.getmPainel().add(new JLabel(new Date().toString()));
     }
-    
+
     @Override
     public void actionPerformed(ActionEvent e) {
         System.out.println(e.getActionCommand());
         if (e.getActionCommand().equals("pessoa")) {
-            minhaView.getmDesktop().add( new Telinha());
+            minhaView.getmDesktop().add(new Telinha());
         } else if (e.getActionCommand().equals("marca")) {
             ControllerMarca controllerMarca = new ControllerMarca();
             //minhaView.getmDesktop().add(controllerMarca.getTelaMarca());
+        } else if (e.getActionCommand().equals("cliente")) {
+            ControllerCliente controllerCliente = new ControllerCliente();
         }
     }
-    
 }

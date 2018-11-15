@@ -5,100 +5,42 @@
  */
 package br.com.lucasj.controller;
 
-import br.com.lucasj.interfaces.CRUDViewInterface;
+import br.com.lucasj.DAO.DaoModelo;
 import br.com.lucasj.interfaces.ControllerInterface;
-import br.com.lucasj.interfaces.DAOInterface;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import br.com.lucasj.model.Modelo;
+import br.com.lucasj.view.TelaModelo;
 
 /**
  *
  * @author lukas
  */
-public class ControllerModelo implements ActionListener {
+public class ControllerModelo implements ControllerInterface {
 
-    ControllerInterface myController;
-    CRUDViewInterface myCrudView;
-    DAOInterface myDAO;
+    private TelaModelo telaModelo;
+    private DaoModelo daoModelo;
 
-    public ControllerModelo(ControllerInterface myController, CRUDViewInterface myCrudView, DAOInterface myDAO) {
-        this.myController = myController;
-        this.myCrudView = myCrudView;
-        this.myDAO = myDAO;
-        this.myCrudView.setActionListener(this);
+    public TelaModelo getTelaModelo() {
+        return telaModelo;
+    }
+
+    public ControllerModelo() {
+        daoModelo = new DaoModelo();
+        telaModelo = new TelaModelo();
+        ControllerCentral CM = new ControllerCentral(this, telaModelo, daoModelo);
+
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
-        System.out.println("An further attack: ~>" + e.getActionCommand() + "<~");
-
-        if (e.getActionCommand().toLowerCase().equals("inserir")) {
-            inserir();
-        } else if (e.getActionCommand().toLowerCase().equals("editar")) {
-            editar();
-        } else if (e.getActionCommand().toLowerCase().equals("salvar")) {
-            salvar();
-        } else if (e.getActionCommand().toLowerCase().equals("excluir")) {
-            excluir();
-        } else if (e.getActionCommand().toLowerCase().equals("cancelar")) {
-            cancelar();
-        } else if (e.getActionCommand().toLowerCase().equals("pesquisar")) {
-            pesquisar();
-        } else if (e.getActionCommand().toLowerCase().equals("abrir")) {
-            abrir();
+    public String verificarCamposObrigatorios() {
+        Modelo modelo = (Modelo) telaModelo.getModel();
+        String msg = null;
+        if (modelo.getTitulo().trim().equals("")) {
+            msg = "Campo título vazio!";
+        } else if (modelo.getMarca() == null) {
+            msg = "Campo marca vazio!";
         }
-    }
-
-    private void inserir() {
-        this.myCrudView.doCRUD("inserir");
-        this.myCrudView.limparCampos();
-        this.myCrudView.setPanelComponentState(true);
-    }
-
-    private void salvar() {
-        String msg = this.myController.verificarCamposObrigatorios();
-        if (msg == null) {
-            this.myCrudView.doCRUD("salvar");
-            Object myObject = this.myCrudView.getModel();
-            myDAO.salvar(myObject);
-            this.myCrudView.preencherCampos(myDAO.getLast());
-            this.myCrudView.setPanelComponentState(false);
-        } else {
-            this.myCrudView.doMsg(msg);
-        }
-    }
-
-    private void editar() {
-        this.myCrudView.doCRUD("editar");
-        this.myCrudView.setPanelComponentState(true);
-    }
-
-    private void cancelar() {
-        this.myCrudView.doCRUD("cancelar");
-        this.myCrudView.limparCampos();
-        this.myCrudView.setPanelComponentState(false);
-    }
-
-    private void excluir() {
-        if (this.myCrudView.doCRUD("excluir")) {
-            this.myDAO.remover(myCrudView.getModel());
-            this.myCrudView.limparCampos();
-            this.myCrudView.setPanelComponentState(false);
-        } else {
-            this.myCrudView.doMsg("Falha na exclusão!");
-        }
-    }
-
-    private void pesquisar() {
-        this.myCrudView.preencherTabelaPesquisar(myDAO.getAll());
-    }
-
-    private void abrir() {
-        Object model = myCrudView.getSelectedModel();
-        if (model != null) {
-            this.myCrudView.limparCampos();
-            this.myCrudView.preencherCampos(myDAO.getByID(model));
-        }
+        return msg;
+        a// LEMBRAR QUE PODE SER QUE NÃO TENHAM MARCAS CADASTRADAS E PODE DAR PAU NO COMBOBOX/SALVAR MARCA VAZIA!
     }
 
 }

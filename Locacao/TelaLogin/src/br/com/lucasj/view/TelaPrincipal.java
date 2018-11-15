@@ -26,7 +26,7 @@ public class TelaPrincipal extends JFrame {
     private JPanel mPainel;
     private JDesktopPane mDesktop;
     private JMenu menuCadastros;
-    private JMenuItem cadastroPessoa, cadastroEmpresa, CadastroMarca;
+    private JMenuItem cadastroPessoa, cadastroEmpresa, cadastroMarca, cadastroCliente, cadastroModelo, cadastroAutomovel, cadastroLocacao;
     private ActionListener al;
 
     public TelaPrincipal(ActionListener al) throws HeadlessException {
@@ -47,9 +47,21 @@ public class TelaPrincipal extends JFrame {
         mDesktop = new JDesktopPane();
         menuCadastros = new JMenu("Cadastros");
         cadastroPessoa = new JMenuItem("Pessoa");
-        CadastroMarca = new JMenuItem("marca");
-        CadastroMarca.addActionListener(al);
-        CadastroMarca.setActionCommand("marca");
+        cadastroMarca = new JMenuItem("Marca");
+        cadastroMarca.addActionListener(al);
+        cadastroMarca.setActionCommand("marca");
+        cadastroCliente = new JMenuItem("Cliente");
+        cadastroCliente.addActionListener(al);
+        cadastroCliente.setActionCommand("cliente");
+        cadastroModelo = new JMenuItem("Modelo");
+        cadastroModelo.addActionListener(al);
+        cadastroModelo.setActionCommand("modelo");
+        cadastroAutomovel = new JMenuItem("Automovel");
+        cadastroAutomovel.addActionListener(al);
+        cadastroAutomovel.setActionCommand("automovel");
+        cadastroLocacao = new JMenuItem("Locação");
+        cadastroLocacao.addActionListener(al);
+        cadastroLocacao.setActionCommand("locacao");
         cadastroPessoa.setActionCommand("pessoa");
         cadastroPessoa.addActionListener(al);
         cadastroEmpresa = new JMenuItem("Empresa");
@@ -59,7 +71,11 @@ public class TelaPrincipal extends JFrame {
         menuBar.add(menuCadastros);
         menuCadastros.add(cadastroPessoa);
         menuCadastros.add(cadastroEmpresa);
-        menuCadastros.add(CadastroMarca);
+        menuCadastros.add(cadastroMarca);
+        menuCadastros.add(cadastroModelo);
+        menuCadastros.add(cadastroCliente);
+        menuCadastros.add(cadastroAutomovel);
+        menuCadastros.add(cadastroLocacao);
         this.getContentPane().add(mDesktop, BorderLayout.CENTER);
         this.getContentPane().add(mPainel, BorderLayout.SOUTH);
 
