@@ -36,6 +36,7 @@ public class DaoAutomovel implements DAOInterface {
                     + " ano = ?, tipoCombustivel = ?, kmAtual = ?, renavam = ?, "
                     + "chasis = ?, vlLocacaoHora = ?, vlLocacaoKm = ?, situacao = ? where idAutomovel = ? ;";
             if (auto.getIdAutomovel() == -1) {
+                auto.setIdAutomovel(0);
                 sql = "insert into automovel(idModelo, placa, cor, ano,"
                         + "tipoCombustivel, kmAtual, renavam, chasis,"
                         + " vlLocacaoHora, vlLocacaoKm, situacao, idAutomovel) values(?,?,?,?,?,?,?,?,?,?,?,?);";
@@ -71,7 +72,7 @@ public class DaoAutomovel implements DAOInterface {
             PreparedStatement ps = this.conn.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
 
-            if (rs.next()) {
+            while (rs.next()) {
                 Automovel auto = new Automovel();
                 auto.setAno(rs.getString("ano"));
                 auto.setChasis(rs.getString("chasis"));
@@ -89,10 +90,10 @@ public class DaoAutomovel implements DAOInterface {
                 auto.setModelo((Modelo) modelo.getByID(rs.getInt("idmodelo")));
 
                 minhaLista.add(auto);
-            } else {
-                return null;
             }
-            return minhaLista;
+            if (minhaLista.size() > 0) {
+                return minhaLista;
+            }
 
         } catch (SQLException ex) {
             System.out.println("#01");

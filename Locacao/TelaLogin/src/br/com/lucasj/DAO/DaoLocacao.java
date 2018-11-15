@@ -38,6 +38,7 @@ public class DaoLocacao implements DAOInterface {
                     + "horainicio = ?, horafim = ?, kminicio = ?, kmfim = ?, kmrodado = ?, "
                     + "tempohoras = ?, vlhora = ?,vlkm = ?,valortotal = ?,situacao = ? where idlocacao = ?;";
             if (loc.getIdLocacao() == -1) {
+                loc.setIdLocacao(0);
                 sql = "insert into locacao(idcliente,idautomovel,horainicio,horafim,"
                         + "kminicio,kmfim,kmrodado,tempohoras,vlhora,vlkm,valortotal,"
                         + "situacao,idlocacao) "
@@ -74,7 +75,7 @@ public class DaoLocacao implements DAOInterface {
             PreparedStatement ps = this.conn.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
 
-            if (rs.next()) {
+            while (rs.next()) {
                 Locacao loc = new Locacao();
                 loc.setAutomovel((Automovel) new DaoAutomovel().getByID(rs.getInt("idautomovel")));
                 loc.setClinte((Cliente) new DaoCliente().getByID(rs.getInt("idcliente")));
@@ -91,10 +92,10 @@ public class DaoLocacao implements DAOInterface {
                 loc.setVlKm(rs.getDouble("vlkm"));
 
                 minhaLista.add(loc);
-            } else {
-                return null;
             }
-            return minhaLista;
+            if (minhaLista.size() > 0) {
+                return minhaLista;
+            }
 
         } catch (SQLException ex) {
             System.out.println("#01");
@@ -107,7 +108,7 @@ public class DaoLocacao implements DAOInterface {
             String sql = "select * from locacao where idlocacao = ?;";
             try {
                 PreparedStatement ps = this.conn.prepareStatement(sql);
-                Locacao loc = new Locacao();
+                Locacao loc = (Locacao) model;
                 ps.setInt(1, loc.getIdLocacao());
                 ResultSet rs = ps.executeQuery();
 

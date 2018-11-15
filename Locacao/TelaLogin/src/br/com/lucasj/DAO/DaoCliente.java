@@ -34,6 +34,7 @@ public class DaoCliente implements DAOInterface {
             Cliente cliente = (Cliente) model;
             String sql = "update cliente set nome = ? where idcliente=?;";
             if (cliente.getIdCliente() == -1) {
+                cliente.setIdCliente(0);
                 sql = "insert into cliente(nome, idcliente) values(?,?);";
             }
 
@@ -55,15 +56,15 @@ public class DaoCliente implements DAOInterface {
             PreparedStatement ps = this.conn.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
 
-            if (rs.next()) {
+            while (rs.next()) {
                 Cliente cliente = new Cliente();
                 cliente.setIdCliente(rs.getInt("idcliente"));
                 cliente.setNome(rs.getString("nome"));
                 minhaLista.add(cliente);
-            } else {
-                return null;
             }
-            return minhaLista;
+            if (minhaLista.size() > 0) {
+                return minhaLista;
+            }
 
         } catch (SQLException ex) {
             System.out.println("#01");
@@ -76,7 +77,7 @@ public class DaoCliente implements DAOInterface {
             String sql = "select * from cliente where idcliente = ?;";
             try {
                 PreparedStatement ps = this.conn.prepareStatement(sql);
-                Cliente cliente = new Cliente();
+                Cliente cliente = (Cliente) model;
                 ps.setInt(1, cliente.getIdCliente());
                 ResultSet rs = ps.executeQuery();
 

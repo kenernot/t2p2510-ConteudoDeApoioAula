@@ -61,7 +61,8 @@ public class ControllerModelo implements ActionListener {
             this.myCrudView.doCRUD("salvar");
             Object myObject = this.myCrudView.getModel();
             myDAO.salvar(myObject);
-            this.myCrudView.preencherCampos(myDAO.getLast());;
+            this.myCrudView.preencherCampos(myDAO.getLast());
+            this.myCrudView.setPanelComponentState(false);
         } else {
             this.myCrudView.doMsg(msg);
         }
@@ -93,8 +94,11 @@ public class ControllerModelo implements ActionListener {
     }
 
     private void abrir() {
-        this.myCrudView.limparCampos();
-        this.myCrudView.preencherCampos(myDAO.getByID(myCrudView.getSelectedModel()));
+        Object model = myCrudView.getSelectedModel();
+        if (model != null) {
+            this.myCrudView.limparCampos();
+            this.myCrudView.preencherCampos(myDAO.getByID(model));
+        }
     }
 
 }

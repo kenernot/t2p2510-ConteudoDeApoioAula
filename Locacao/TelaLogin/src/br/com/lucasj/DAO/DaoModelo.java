@@ -32,6 +32,7 @@ public class DaoModelo implements DAOInterface {
             Modelo mod = (Modelo) model;
             String sql = "update modelo set titulo = ?, idmarca where idmodelo = ? ;";
             if (mod.getIdModelo() == -1) {
+                mod.setIdModelo(0);
                 sql = "insert into modelo(titulo, idmarca, idmodelo) values(?,?,?);";
             }
 
@@ -54,17 +55,17 @@ public class DaoModelo implements DAOInterface {
             PreparedStatement ps = this.conn.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
 
-            if (rs.next()) {
+            while (rs.next()) {
                 Modelo modelo = new Modelo();
                 modelo.setIdModelo(rs.getInt("idmodelo"));
                 modelo.setTitulo(rs.getString("titulo"));
                 DaoMarca dm = new DaoMarca();
                 modelo.setMarca((Marca) dm.getByID(rs.getInt("idmarca")));
                 minhaLista.add(modelo);
-            } else {
-                return null;
             }
-            return minhaLista;
+            if (minhaLista.size() > 0) {
+                return minhaLista;
+            }
 
         } catch (SQLException ex) {
             System.out.println("#01");
@@ -77,7 +78,7 @@ public class DaoModelo implements DAOInterface {
             String sql = "select * from modelo where idemodelo = ?;";
             try {
                 PreparedStatement ps = this.conn.prepareStatement(sql);
-                Modelo modelo = new Modelo();
+                Modelo modelo = (Modelo) model;
                 ps.setInt(1, modelo.getIdModelo());
                 ResultSet rs = ps.executeQuery();
 
