@@ -29,13 +29,19 @@ public class ControllerPrincipal implements ActionListener {
             minhaView.getmDesktop().add(new Telinha());
         } else if (e.getActionCommand().equals("marca")) {
             ControllerMarca controllerMarca = new ControllerMarca();
-            //minhaView.getmDesktop().add(controllerMarca.getTelaMarca());
+            minhaView.getmDesktop().add(controllerMarca.getTelaMarca());
         } else if (e.getActionCommand().equals("cliente")) {
             ControllerCliente controllerCliente = new ControllerCliente();
+            minhaView.getmDesktop().add(controllerCliente.getTelaCliente());
         } else if (e.getActionCommand().equals("modelo")) {
             ControllerModelo controllerModelo = new ControllerModelo();
+            minhaView.getmDesktop().add(controllerModelo.getTelaModelo());
         } else if (e.getActionCommand().equals("automovel")) {
             ControllerAutomovel controllerAutomovel = new ControllerAutomovel();
+            minhaView.getmDesktop().add(controllerAutomovel.getTelaAutomovel());
+        } else if (e.getActionCommand().equals("locacao")) {
+            ControllerLocacao controllerLocacao = new ControllerLocacao();
+            minhaView.getmDesktop().add(controllerLocacao.getTelaLocacao());
         }
     }
 }

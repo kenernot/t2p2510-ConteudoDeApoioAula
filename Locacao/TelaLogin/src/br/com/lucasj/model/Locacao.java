@@ -12,11 +12,12 @@ import java.util.Date;
  * @author lukas
  */
 public class Locacao {
+
     private int idLocacao;
     private Cliente clinte;
     private Automovel automovel;
-    private Date horaInicio;
-    private Date horaFim;
+    private String horaInicio;
+    private String horaFim;
     private Double kmInicio;
     private Double kmFim;
     private Double kmRodado;
@@ -50,19 +51,19 @@ public class Locacao {
         this.automovel = automovel;
     }
 
-    public Date getHoraInicio() {
+    public String getHoraInicio() {
         return horaInicio;
     }
 
-    public void setHoraInicio(Date horaInicio) {
+    public void setHoraInicio(String horaInicio) {
         this.horaInicio = horaInicio;
     }
 
-    public Date getHoraFim() {
+    public String getHoraFim() {
         return horaFim;
     }
 
-    public void setHoraFim(Date horaFim) {
+    public void setHoraFim(String horaFim) {
         this.horaFim = horaFim;
     }
 

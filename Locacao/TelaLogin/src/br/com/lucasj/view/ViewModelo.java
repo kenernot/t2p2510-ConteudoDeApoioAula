@@ -26,7 +26,7 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author lukas
  */
-public class ViewModelo extends JFrame implements ActionListener {
+public class ViewModelo extends JInternalFrame implements ActionListener {
 
     protected JPanel panelTOP, panelMID, panelBOT, panelINTERNO, panelPesquisa;
     protected JButton btInserir, btEditar, btSalvar, btRemover, btCancelar, btExit, btPesquisar, btAbrir;
@@ -186,5 +186,15 @@ public class ViewModelo extends JFrame implements ActionListener {
         tabela.setModel(tm);
         tabela.setRowSelectionAllowed(false);
 
+    }
+
+    protected void limpaFields() {
+        Component[] components = this.panelMID.getComponents();
+
+        for (Component component : components) {
+            if (component instanceof JTextField) {
+                ((JTextField) component).setText("");
+            }
+        }
     }
 }

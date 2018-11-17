@@ -86,7 +86,6 @@ public class DaoModelo implements DAOInterface {
                 ResultSet rs = ps.executeQuery();
 
                 if (rs.next()) {
-                    System.out.println("rsNEXTGETBYIDDAOMODELO");
                     modelo.setIdModelo(rs.getInt("idmodelo"));
                     modelo.setTitulo(rs.getString("titulo"));
                     DaoMarca dm = new DaoMarca();

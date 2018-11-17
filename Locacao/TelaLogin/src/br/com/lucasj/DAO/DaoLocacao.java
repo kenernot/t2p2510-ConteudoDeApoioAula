@@ -15,7 +15,11 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -35,31 +39,21 @@ public class DaoLocacao implements DAOInterface {
 
             Locacao loc = (Locacao) model;
             String sql = "update locacao set idcliente = ?, idautomovel = ?, "
-                    + "horainicio = ?, horafim = ?, kminicio = ?, kmfim = ?, kmrodado = ?, "
-                    + "tempohoras = ?, vlhora = ?,vlkm = ?,valortotal = ?,situacao = ? where idlocacao = ?;";
+                    + "kmfim = ?, situacao = ? where idlocacao = ?;";
             if (loc.getIdLocacao() == -1) {
                 loc.setIdLocacao(0);
-                sql = "insert into locacao(idcliente,idautomovel,horainicio,horafim,"
-                        + "kminicio,kmfim,kmrodado,tempohoras,vlhora,vlkm,valortotal,"
-                        + "situacao,idlocacao) "
-                        + "values(?,?,?,?,?,?,?,?,?,?,?,?,?);";
+                sql = "insert into locacao(idcliente,idautomovel,"
+                        + "kmfim,situacao,idlocacao) "
+                        + "values(?,?,?,?,?);";
             }
 
             try {
                 PreparedStatement ps = this.conn.prepareStatement(sql);
                 ps.setInt(1, loc.getCliente().getIdCliente());
                 ps.setInt(2, loc.getAutomovel().getIdAutomovel());
-                ps.setDate(3, (Date) loc.getHoraInicio());
-                ps.setDate(4, (Date) loc.getHoraFim());
-                ps.setDouble(5, loc.getKmInicio());
-                ps.setDouble(6, loc.getKmFim());
-                ps.setDouble(7, loc.getKmRodado());
-                ps.setDouble(8, loc.getTempoHoras());
-                ps.setDouble(9, loc.getVlHora());
-                ps.setDouble(10, loc.getVlKm());
-                ps.setDouble(11, loc.getValorTotal());
-                ps.setString(12, loc.getSituacao());
-                ps.setInt(13, loc.getIdLocacao());
+                ps.setObject(3, loc.getKmFim());
+                ps.setString(4, loc.getSituacao());
+                ps.setInt(5, loc.getIdLocacao());
 
                 ps.executeUpdate();
             } catch (SQLException ex) {
@@ -77,7 +71,7 @@ public class DaoLocacao implements DAOInterface {
 
             while (rs.next()) {
                 Locacao loc = new Locacao();
-                
+
                 DaoAutomovel daoAutomovel = new DaoAutomovel();
                 Automovel auto = new Automovel();
                 auto.setIdAutomovel(rs.getInt("idautomovel"));
@@ -88,9 +82,10 @@ public class DaoLocacao implements DAOInterface {
 
                 loc.setAutomovel((Automovel) daoAutomovel.getByID(auto));
                 loc.setClinte((Cliente) daoCliente.getByID(cliente));
-                
-                loc.setHoraFim(rs.getDate("horafim"));
-                loc.setHoraInicio(rs.getDate("horainicio"));
+
+                loc.setHoraFim(rs.getString("horafim"));
+                loc.setHoraInicio(rs.getString("horainicio"));
+
                 loc.setIdLocacao(rs.getInt("idlocacao"));
                 loc.setKmFim(rs.getDouble("kmfim"));
                 loc.setKmInicio(rs.getDouble("kminicio"));
@@ -135,8 +130,9 @@ public class DaoLocacao implements DAOInterface {
                     loc.setAutomovel((Automovel) daoAutomovel.getByID(auto));
                     loc.setClinte((Cliente) daoCliente.getByID(cliente));
 
-                    loc.setHoraFim(rs.getDate("horafim"));
-                    loc.setHoraInicio(rs.getDate("horainicio"));
+                    loc.setHoraFim(rs.getString("horafim"));
+                    loc.setHoraInicio(rs.getString("horainicio"));
+
                     loc.setIdLocacao(rs.getInt("idlocacao"));
                     loc.setKmFim(rs.getDouble("kmfim"));
                     loc.setKmInicio(rs.getDouble("kminicio"));
@@ -195,10 +191,11 @@ public class DaoLocacao implements DAOInterface {
                 loc.setAutomovel((Automovel) daoAutomovel.getByID(auto));
                 loc.setClinte((Cliente) daoCliente.getByID(cliente));
 
-                loc.setHoraFim(rs.getDate("horafim"));
-                loc.setHoraInicio(rs.getDate("horainicio"));
+                loc.setHoraFim(rs.getString("horafim"));
+                loc.setHoraInicio(rs.getString("horainicio"));
+                
                 loc.setIdLocacao(rs.getInt("idlocacao"));
-                loc.setKmFim(rs.getDouble("kmfim"));
+                loc.setKmFim((Double) rs.getObject("kmfim"));
                 loc.setKmInicio(rs.getDouble("kminicio"));
                 loc.setKmRodado(rs.getDouble("kmrodado"));
                 loc.setSituacao(rs.getString("situacao"));

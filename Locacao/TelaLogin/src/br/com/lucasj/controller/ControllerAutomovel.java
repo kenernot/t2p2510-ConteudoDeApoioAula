@@ -39,11 +39,15 @@ public class ControllerAutomovel implements ControllerInterface {
         String msg = null;
         if (auto.getKmAtual() == null) {
             msg = "Campo km atual inválido!";
-        } else if (auto.getModelo()== null) {
+        } else if (auto.getModelo() == null) {
             msg = "Campo modelo inválido!";
         } else if (auto.getPlaca().trim().equals("")) {
             msg = "Campo placa vazio!";
-        } 
+        } else if (auto.getVlLocacaoKm() == null || auto.getVlLocacaoKm() <= 0) {
+            msg = "Campo vlKM inválido!";
+        } else if (auto.getVlLocacaoHora()== null || auto.getVlLocacaoHora() <= 0) {
+            msg = "Campo vlHora inválido!";
+        }
         return msg;
 
     }

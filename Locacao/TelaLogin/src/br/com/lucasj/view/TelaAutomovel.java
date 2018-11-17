@@ -5,13 +5,12 @@
  */
 package br.com.lucasj.view;
 
-import br.com.lucasj.DAO.DaoMarca;
 import br.com.lucasj.DAO.DaoModelo;
 import br.com.lucasj.interfaces.CRUDViewInterface;
 import br.com.lucasj.model.Automovel;
-import br.com.lucasj.model.Marca;
 import br.com.lucasj.model.Modelo;
 import br.com.lucasj.services.Util;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
@@ -45,10 +44,12 @@ public class TelaAutomovel extends ViewModelo implements CRUDViewInterface {
     private void init() {
         edIdAutomovel = new JTextField();
         edPlaca = new JTextField();
+        edPlaca.setBackground(Color.GREEN);
         edCor = new JTextField();
         edAno = new JTextField();
         edTipoCombustivel = new JTextField();
         edKmAtual = new JTextField();
+        edKmAtual.setBackground(Color.GREEN);
         edRenavam = new JTextField();
         edChasis = new JTextField();
         edVlLocacaoHora = new JTextField();
@@ -57,6 +58,7 @@ public class TelaAutomovel extends ViewModelo implements CRUDViewInterface {
         edIdAutomovel.setEnabled(false);
 
         comboModelo = new JComboBox();
+        comboModelo.setBackground(Color.GREEN);
         meusModelos = null;
         radioInativo = new JRadioButton("Inativo");
         radioLivre = new JRadioButton("Livre");
@@ -165,12 +167,7 @@ public class TelaAutomovel extends ViewModelo implements CRUDViewInterface {
 
     @Override
     public void limparCampos() {
-        JTextField[] arrayField = {edIdAutomovel, edPlaca, edCor, edAno,
-            edTipoCombustivel, edKmAtual, edRenavam, edChasis, edVlLocacaoHora, edVlLocacaoKm};
-
-        for (int i = 0; i < arrayField.length; i++) {
-            arrayField[i].setText("");
-        }
+        limpaFields();
 
         radioInativo.setSelected(true);
 
@@ -181,6 +178,12 @@ public class TelaAutomovel extends ViewModelo implements CRUDViewInterface {
     public boolean doCRUD(String CRUDCommand) {
         if (CRUDCommand.equals("excluir") && edIdAutomovel.getText().equals("")) {
             return false;
+        } else if (CRUDCommand.equals("editar") && !edIdAutomovel.getText().equals("")) {
+            edKmAtual.setEnabled(false);
+            edVlLocacaoKm.setEnabled(false);
+            edVlLocacaoHora.setEnabled(false);
+            this.setCRUDButtons(CRUDCommand);
+            return true;
         } else {
             this.setCRUDButtons(CRUDCommand);
             return true;
@@ -203,11 +206,11 @@ public class TelaAutomovel extends ViewModelo implements CRUDViewInterface {
         auto.setRenavam(edRenavam.getText());
         auto.setTipoCombustivel(edTipoCombustivel.getText());
 
-        String situacao = "Locado";
+        String situacao = "locado";
         if (radioInativo.isSelected()) {
-            situacao = "Inativo";
+            situacao = "inativo";
         } else if (radioLivre.isSelected()) {
-            situacao = "Livre";
+            situacao = "livre";
         }
 
         auto.setSituacao(situacao);
@@ -230,7 +233,7 @@ public class TelaAutomovel extends ViewModelo implements CRUDViewInterface {
         auto.setVlLocacaoKm(vlLocacaoKm);
 
         Modelo modelo = null;
-        if (meusModelos != null) {
+        if (meusModelos != null && meusModelos.size() > 0) {
             modelo = (Modelo) meusModelos.get(comboModelo.getSelectedIndex());
             auto.setModelo(modelo);
         }
@@ -272,7 +275,7 @@ public class TelaAutomovel extends ViewModelo implements CRUDViewInterface {
         comboModelo.removeAllItems();
         DaoModelo DM = new DaoModelo();
         meusModelos = DM.getAll();
-        if (meusModelos != null) {
+        if (meusModelos != null && meusModelos.size() > 0) {
             for (int i = 0; i < meusModelos.size(); i++) {
                 Modelo modelo = (Modelo) meusModelos.get(i);
                 comboModelo.addItem(modelo.getTitulo());

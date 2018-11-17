@@ -7,12 +7,12 @@ package br.com.lucasj.view;
 
 import br.com.lucasj.interfaces.CRUDViewInterface;
 import br.com.lucasj.model.Marca;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 /**
@@ -20,31 +20,31 @@ import javax.swing.JTextField;
  * @author lukas
  */
 public class TelaMarca extends ViewModelo implements CRUDViewInterface {
-    
+
     private JTextField edIdMarca, edTitulo;
-    
+
     public TelaMarca() {
         super(":Tela Marca");
         init();
     }
-    
+
     private void init() {
         edIdMarca = new JTextField();
         edIdMarca.setEnabled(false);
         edTitulo = new JTextField();
-        
+        edTitulo.setBackground(Color.GREEN);
         this.panelMID.add(new JLabel("ID MARCA:"));
         this.panelMID.add(edIdMarca);
         this.panelMID.add(new JLabel("TITULO:"));
         this.panelMID.add(edTitulo);
-        
+
         setTable(new String[]{"idMarca", "Titulo"});
         this.pack();
         this.setSize(new Dimension(600, 400));
         this.setVisible(true);
         setPanelComponentState(false);
     }
-    
+
     @Override
     public void preencherTabelaPesquisar(ArrayList<Object> listaItensEncontrados) {
         this.tm.setRowCount(0);
@@ -58,7 +58,7 @@ public class TelaMarca extends ViewModelo implements CRUDViewInterface {
             }
         }
     }
-    
+
     @Override
     public void preencherCampos(Object model) {
         if (model instanceof Marca) {
@@ -67,13 +67,12 @@ public class TelaMarca extends ViewModelo implements CRUDViewInterface {
             edTitulo.setText(marca.getTitulo());
         }
     }
-    
+
     @Override
     public void limparCampos() {
-        edIdMarca.setText("");
-        edTitulo.setText("");
+        limpaFields();
     }
-    
+
     @Override
     public boolean doCRUD(String CRUDCommand) {
         if (CRUDCommand.equals("excluir") && edIdMarca.getText().equals("")) {
@@ -83,7 +82,7 @@ public class TelaMarca extends ViewModelo implements CRUDViewInterface {
             return true;
         }
     }
-    
+
     @Override
     public Object getModel() {
         Marca marca = new Marca();
@@ -95,7 +94,7 @@ public class TelaMarca extends ViewModelo implements CRUDViewInterface {
         marca.setTitulo(edTitulo.getText());
         return marca;
     }
-    
+
     @Override
     public Object getSelectedModel() {
         Marca marca = null;
@@ -106,21 +105,21 @@ public class TelaMarca extends ViewModelo implements CRUDViewInterface {
         }
         return marca;
     }
-    
+
     @Override
     public void doMsg(String msg) {
         JOptionPane.showMessageDialog(null, msg);
     }
-    
+
     @Override
     public void setActionListener(ActionListener al) {
         setActionListenerPAI(al);
     }
-    
+
     @Override
     public void setPanelComponentState(Boolean state) {
         setPanelCompEnable(state);
         edIdMarca.setEnabled(false);
     }
-    
+
 }

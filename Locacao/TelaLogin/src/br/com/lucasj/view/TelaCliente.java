@@ -7,6 +7,7 @@ package br.com.lucasj.view;
 
 import br.com.lucasj.interfaces.CRUDViewInterface;
 import br.com.lucasj.model.Cliente;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -31,7 +32,7 @@ public class TelaCliente extends ViewModelo implements CRUDViewInterface {
         edIdCliente = new JTextField();
         edIdCliente.setEnabled(false);
         edNome = new JTextField();
-
+        edNome.setBackground(Color.GREEN);
         this.panelMID.add(new JLabel("ID CLIENTE:"));
         this.panelMID.add(edIdCliente);
         this.panelMID.add(new JLabel("NOME:"));
@@ -69,8 +70,7 @@ public class TelaCliente extends ViewModelo implements CRUDViewInterface {
 
     @Override
     public void limparCampos() {
-        edIdCliente.setText("");
-        edNome.setText("");
+        limpaFields();
     }
 
     @Override

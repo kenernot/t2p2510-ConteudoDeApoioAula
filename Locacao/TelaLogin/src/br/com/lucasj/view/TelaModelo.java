@@ -9,6 +9,7 @@ import br.com.lucasj.DAO.DaoMarca;
 import br.com.lucasj.interfaces.CRUDViewInterface;
 import br.com.lucasj.model.Marca;
 import br.com.lucasj.model.Modelo;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -35,10 +36,12 @@ public class TelaModelo extends ViewModelo implements CRUDViewInterface {
 
     private void init() {
         comboMarca = new JComboBox();
+        comboMarca.setBackground(Color.GREEN);
         atualizaComboBox();
         edIdModelo = new JTextField();
         edIdModelo.setEnabled(false);
         edTitulo = new JTextField();
+        edTitulo.setBackground(Color.GREEN);
 
         this.panelMID.add(new JLabel("ID MODELO:"));
         this.panelMID.add(edIdModelo);
@@ -90,8 +93,7 @@ public class TelaModelo extends ViewModelo implements CRUDViewInterface {
 
     @Override
     public void limparCampos() {
-        edIdModelo.setText("");
-        edTitulo.setText("");
+        limpaFields();
         atualizaComboBox();
     }
 
@@ -115,7 +117,7 @@ public class TelaModelo extends ViewModelo implements CRUDViewInterface {
         }
         modelo.setTitulo(edTitulo.getText());
         Marca marca = null;
-        if (minhasMarcas != null) {
+        if (minhasMarcas != null && minhasMarcas.size() > 0) {
             marca = (Marca) minhasMarcas.get(comboMarca.getSelectedIndex());
             modelo.setMarca(marca);
         }
@@ -154,7 +156,7 @@ public class TelaModelo extends ViewModelo implements CRUDViewInterface {
         comboMarca.removeAllItems();
         DaoMarca DM = new DaoMarca();
         minhasMarcas = DM.getAll();
-        if (minhasMarcas != null) {
+        if (minhasMarcas != null && minhasMarcas.size() > 0) {
             for (int i = 0; i < minhasMarcas.size(); i++) {
                 Marca marca = (Marca) minhasMarcas.get(i);
                 comboMarca.addItem(marca.getTitulo());

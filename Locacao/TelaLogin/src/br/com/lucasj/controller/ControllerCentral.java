@@ -61,6 +61,7 @@ public class ControllerCentral implements ActionListener {
             this.myCrudView.doCRUD("salvar");
             Object myObject = this.myCrudView.getModel();
             myDAO.salvar(myObject);
+            
             this.myCrudView.preencherCampos(myDAO.getLast());
             this.myCrudView.setPanelComponentState(false);
         } else {
@@ -69,8 +70,8 @@ public class ControllerCentral implements ActionListener {
     }
 
     private void editar() {
-        this.myCrudView.doCRUD("editar");
         this.myCrudView.setPanelComponentState(true);
+        this.myCrudView.doCRUD("editar");
     }
 
     private void cancelar() {
