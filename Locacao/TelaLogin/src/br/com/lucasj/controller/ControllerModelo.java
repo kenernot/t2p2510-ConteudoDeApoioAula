@@ -40,7 +40,7 @@ public class ControllerModelo implements ControllerInterface {
             msg = "Campo marca vazio!";
         }
         return msg;
-        a// LEMBRAR QUE PODE SER QUE NÃO TENHAM MARCAS CADASTRADAS E PODE DAR PAU NO COMBOBOX/SALVAR MARCA VAZIA!
+
     }
 
 }

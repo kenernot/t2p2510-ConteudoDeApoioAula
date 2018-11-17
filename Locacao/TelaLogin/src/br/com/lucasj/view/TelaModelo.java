@@ -114,8 +114,11 @@ public class TelaModelo extends ViewModelo implements CRUDViewInterface {
             modelo.setIdModelo(Integer.parseInt(edIdModelo.getText()));
         }
         modelo.setTitulo(edTitulo.getText());
-        Marca marca = (Marca) minhasMarcas.get(comboMarca.getSelectedIndex());
-        modelo.setMarca(marca);
+        Marca marca = null;
+        if (minhasMarcas != null) {
+            marca = (Marca) minhasMarcas.get(comboMarca.getSelectedIndex());
+            modelo.setMarca(marca);
+        }
         return modelo;
     }
 
@@ -126,6 +129,7 @@ public class TelaModelo extends ViewModelo implements CRUDViewInterface {
             modelo = new Modelo();
             modelo.setIdModelo((int) this.tm.getValueAt(tabela.getSelectedRow(), 0));
             modelo.setTitulo((String) this.tm.getValueAt(tabela.getSelectedRow(), 1));
+
         }
         return modelo;
     }
@@ -150,10 +154,11 @@ public class TelaModelo extends ViewModelo implements CRUDViewInterface {
         comboMarca.removeAllItems();
         DaoMarca DM = new DaoMarca();
         minhasMarcas = DM.getAll();
-
-        for (int i = 0; i < minhasMarcas.size(); i++) {
-            Marca marca = (Marca) minhasMarcas.get(i);
-            comboMarca.addItem(marca.getTitulo());
+        if (minhasMarcas != null) {
+            for (int i = 0; i < minhasMarcas.size(); i++) {
+                Marca marca = (Marca) minhasMarcas.get(i);
+                comboMarca.addItem(marca.getTitulo());
+            }
         }
     }
 

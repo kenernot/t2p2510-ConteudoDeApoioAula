@@ -14,8 +14,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -43,6 +41,15 @@ public class DaoAutomovel implements DAOInterface {
             }
 
             try {
+                if (auto.getKmAtual() == null) {
+                    auto.setKmAtual(0.00);
+                }
+                if (auto.getVlLocacaoHora() == null) {
+                    auto.setVlLocacaoHora(0.00);
+                }
+                if (auto.getVlLocacaoKm() == null) {
+                    auto.setVlLocacaoKm(0.00);
+                }
                 PreparedStatement ps = this.conn.prepareStatement(sql);
                 ps.setInt(1, auto.getModelo().getIdModelo());
                 ps.setString(2, auto.getPlaca());
@@ -86,8 +93,10 @@ public class DaoAutomovel implements DAOInterface {
                 auto.setVlLocacaoKm(rs.getDouble("vllocacaokm"));
                 auto.setIdAutomovel(rs.getInt("idautomovel"));
 
-                DaoModelo modelo = new DaoModelo();
-                auto.setModelo((Modelo) modelo.getByID(rs.getInt("idmodelo")));
+                DaoModelo daoModelo = new DaoModelo();
+                Modelo modelo = new Modelo();
+                modelo.setIdModelo(rs.getInt("idmodelo"));
+                auto.setModelo((Modelo) daoModelo.getByID(modelo));
 
                 minhaLista.add(auto);
             }
@@ -123,8 +132,10 @@ public class DaoAutomovel implements DAOInterface {
                     auto.setVlLocacaoKm(rs.getDouble("vllocacaokm"));
                     auto.setIdAutomovel(rs.getInt("idautomovel"));
 
-                    DaoModelo modelo = new DaoModelo();
-                    auto.setModelo((Modelo) modelo.getByID(rs.getInt("idmodelo")));
+                    DaoModelo daoModelo = new DaoModelo();
+                    Modelo modelo = new Modelo();
+                    modelo.setIdModelo(rs.getInt("idmodelo"));
+                    auto.setModelo((Modelo) daoModelo.getByID(modelo));
                     return auto;
                 } else {
                     return null;
@@ -174,8 +185,10 @@ public class DaoAutomovel implements DAOInterface {
                 auto.setVlLocacaoKm(rs.getDouble("vllocacaokm"));
                 auto.setIdAutomovel(rs.getInt("idautomovel"));
 
-                DaoModelo modelo = new DaoModelo();
-                auto.setModelo((Modelo) modelo.getByID(rs.getInt("idmodelo")));
+                DaoModelo daoModelo = new DaoModelo();
+                Modelo modelo = new Modelo();
+                modelo.setIdModelo(rs.getInt("idmodelo"));
+                auto.setModelo((Modelo) daoModelo.getByID(modelo));
                 return auto;
             } else {
                 return null;

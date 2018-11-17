@@ -1,12 +1,8 @@
 package br.com.lucasj.controller;
 
-import br.com.lucasj.DAO.DaoUsuario;
 import br.com.lucasj.model.Usuario;
-import br.com.lucasj.services.Conexao;
 import br.com.lucasj.view.TelaPrincipal;
-import br.com.lucasj.view.TelaUsuario;
 import br.com.lucasj.view.Telinha;
-import com.sun.prism.j2d.J2DPipeline;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Date;
@@ -36,6 +32,10 @@ public class ControllerPrincipal implements ActionListener {
             //minhaView.getmDesktop().add(controllerMarca.getTelaMarca());
         } else if (e.getActionCommand().equals("cliente")) {
             ControllerCliente controllerCliente = new ControllerCliente();
+        } else if (e.getActionCommand().equals("modelo")) {
+            ControllerModelo controllerModelo = new ControllerModelo();
+        } else if (e.getActionCommand().equals("automovel")) {
+            ControllerAutomovel controllerAutomovel = new ControllerAutomovel();
         }
     }
 }

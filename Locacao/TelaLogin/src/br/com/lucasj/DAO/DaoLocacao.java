@@ -77,8 +77,18 @@ public class DaoLocacao implements DAOInterface {
 
             while (rs.next()) {
                 Locacao loc = new Locacao();
-                loc.setAutomovel((Automovel) new DaoAutomovel().getByID(rs.getInt("idautomovel")));
-                loc.setClinte((Cliente) new DaoCliente().getByID(rs.getInt("idcliente")));
+                
+                DaoAutomovel daoAutomovel = new DaoAutomovel();
+                Automovel auto = new Automovel();
+                auto.setIdAutomovel(rs.getInt("idautomovel"));
+
+                DaoCliente daoCliente = new DaoCliente();
+                Cliente cliente = new Cliente();
+                cliente.setIdCliente(rs.getInt("idcliente"));
+
+                loc.setAutomovel((Automovel) daoAutomovel.getByID(auto));
+                loc.setClinte((Cliente) daoCliente.getByID(cliente));
+                
                 loc.setHoraFim(rs.getDate("horafim"));
                 loc.setHoraInicio(rs.getDate("horainicio"));
                 loc.setIdLocacao(rs.getInt("idlocacao"));
@@ -114,8 +124,17 @@ public class DaoLocacao implements DAOInterface {
 
                 if (rs.next()) {
 
-                    loc.setAutomovel((Automovel) new DaoAutomovel().getByID(rs.getInt("idautomovel")));
-                    loc.setClinte((Cliente) new DaoCliente().getByID(rs.getInt("idcliente")));
+                    DaoAutomovel daoAutomovel = new DaoAutomovel();
+                    Automovel auto = new Automovel();
+                    auto.setIdAutomovel(rs.getInt("idautomovel"));
+
+                    DaoCliente daoCliente = new DaoCliente();
+                    Cliente cliente = new Cliente();
+                    cliente.setIdCliente(rs.getInt("idcliente"));
+
+                    loc.setAutomovel((Automovel) daoAutomovel.getByID(auto));
+                    loc.setClinte((Cliente) daoCliente.getByID(cliente));
+
                     loc.setHoraFim(rs.getDate("horafim"));
                     loc.setHoraInicio(rs.getDate("horainicio"));
                     loc.setIdLocacao(rs.getInt("idlocacao"));
@@ -164,8 +183,18 @@ public class DaoLocacao implements DAOInterface {
 
             if (rs.next()) {
                 Locacao loc = new Locacao();
-                loc.setAutomovel((Automovel) new DaoAutomovel().getByID(rs.getInt("idautomovel")));
-                loc.setClinte((Cliente) new DaoCliente().getByID(rs.getInt("idcliente")));
+
+                DaoAutomovel daoAutomovel = new DaoAutomovel();
+                Automovel auto = new Automovel();
+                auto.setIdAutomovel(rs.getInt("idautomovel"));
+
+                DaoCliente daoCliente = new DaoCliente();
+                Cliente cliente = new Cliente();
+                cliente.setIdCliente(rs.getInt("idcliente"));
+
+                loc.setAutomovel((Automovel) daoAutomovel.getByID(auto));
+                loc.setClinte((Cliente) daoCliente.getByID(cliente));
+
                 loc.setHoraFim(rs.getDate("horafim"));
                 loc.setHoraInicio(rs.getDate("horainicio"));
                 loc.setIdLocacao(rs.getInt("idlocacao"));

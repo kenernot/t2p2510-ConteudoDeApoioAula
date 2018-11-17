@@ -13,7 +13,6 @@ public class Conexao {
 
     private static Conexao instance = null;
 
-
     private static Connection createConnection() {
         Properties config = new Properties();
         config.put("user", "root");
@@ -28,7 +27,7 @@ public class Conexao {
             );
 
         } catch (ClassNotFoundException | SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println(">!$>:" + e.getMessage());
         }
         return conn;
     }

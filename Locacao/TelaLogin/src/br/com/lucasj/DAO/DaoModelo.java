@@ -30,7 +30,7 @@ public class DaoModelo implements DAOInterface {
     public void salvar(Object model) {
         if (model instanceof Modelo) {
             Modelo mod = (Modelo) model;
-            String sql = "update modelo set titulo = ?, idmarca where idmodelo = ? ;";
+            String sql = "update modelo set titulo = ?, idmarca = ? where idmodelo = ? ;";
             if (mod.getIdModelo() == -1) {
                 mod.setIdModelo(0);
                 sql = "insert into modelo(titulo, idmarca, idmodelo) values(?,?,?);";
@@ -60,7 +60,10 @@ public class DaoModelo implements DAOInterface {
                 modelo.setIdModelo(rs.getInt("idmodelo"));
                 modelo.setTitulo(rs.getString("titulo"));
                 DaoMarca dm = new DaoMarca();
-                modelo.setMarca((Marca) dm.getByID(rs.getInt("idmarca")));
+                Marca marca = new Marca();
+                marca.setIdMarca(rs.getInt("idmarca"));
+
+                modelo.setMarca((Marca) dm.getByID(marca));
                 minhaLista.add(modelo);
             }
             if (minhaLista.size() > 0) {
@@ -74,8 +77,8 @@ public class DaoModelo implements DAOInterface {
     }
 
     public Object getByID(Object model) {
-        if (model instanceof Modelo && model != model) {
-            String sql = "select * from modelo where idemodelo = ?;";
+        if (model instanceof Modelo && model != null) {
+            String sql = "select * from modelo where idmodelo = ?;";
             try {
                 PreparedStatement ps = this.conn.prepareStatement(sql);
                 Modelo modelo = (Modelo) model;
@@ -83,11 +86,13 @@ public class DaoModelo implements DAOInterface {
                 ResultSet rs = ps.executeQuery();
 
                 if (rs.next()) {
-
+                    System.out.println("rsNEXTGETBYIDDAOMODELO");
                     modelo.setIdModelo(rs.getInt("idmodelo"));
                     modelo.setTitulo(rs.getString("titulo"));
                     DaoMarca dm = new DaoMarca();
-                    modelo.setMarca((Marca) dm.getByID(rs.getInt("idmarca")));
+                    Marca marca = new Marca();
+                    marca.setIdMarca(rs.getInt("idmarca"));
+                    modelo.setMarca((Marca) dm.getByID(marca));
                     return modelo;
                 } else {
                     return null;
@@ -118,7 +123,7 @@ public class DaoModelo implements DAOInterface {
 
     @Override
     public Object getLast() {
-        String sql = "select * from usuario where idusuario = (select max(idusuario) from usuario);";
+        String sql = "select * from modelo where idmodelo = (select max(idmodelo) from modelo);";
         try {
             PreparedStatement ps = this.conn.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
@@ -128,7 +133,10 @@ public class DaoModelo implements DAOInterface {
                 modelo.setIdModelo(rs.getInt("idmodelo"));
                 modelo.setTitulo(rs.getString("titulo"));
                 DaoMarca dm = new DaoMarca();
-                modelo.setMarca((Marca) dm.getByID(rs.getInt("idmarca")));
+                Marca marca = new Marca();
+                marca.setIdMarca(rs.getInt("idmarca"));
+                modelo.setMarca((Marca) dm.getByID(marca));
+
                 return modelo;
             } else {
                 return null;
