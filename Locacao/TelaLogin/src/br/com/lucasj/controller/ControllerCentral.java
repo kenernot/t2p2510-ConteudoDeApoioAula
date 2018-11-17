@@ -97,6 +97,8 @@ public class ControllerCentral implements ActionListener {
     private void abrir() {
         Object model = myCrudView.getSelectedModel();
         if (model != null) {
+            this.myCrudView.doCRUD("salvar");
+            this.myCrudView.setPanelComponentState(false);
             this.myCrudView.limparCampos();
             this.myCrudView.preencherCampos(myDAO.getByID(model));
         }
